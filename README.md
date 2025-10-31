@@ -45,13 +45,6 @@ Deployment	      GitHub Pages
 7. Customizable Responses – Fine-tuned GPT model allows plant-specific terminology and contextual understanding.
 
 
-# Hackathon Impact
-
-“Empowering smarter manufacturing with AI-driven insights.”
-
-Nokia GPT showcases how AI can seamlessly combine data, vision, and natural language understanding to drive efficiency, reduce downtime, and enable human–machine collaboration in industrial environments.
-
-
 # How to Run Locally
 1️⃣ Clone the Repository
 git clone https://github.com/<your-username>/File_name.git
@@ -63,19 +56,48 @@ pip install -r requirements.txt
 
 Create a .env file in the root directory:
 
-
-# AZURE Credentials
+AZURE Credentials
 AZURE_OPENAI_ENDPOINT="your_azure_endpoint_here"
+
 AZURE_OPENAI_KEY="your_api_key_here"
+
 AZURE_OPENAI_API_VERSION= "Version_details"
+
 AZURE_OPENAI_CHAT_DEPLOYMENT= Deployment_name
+
 AZURE_OPENAI_EMBED_DEPLOYMENT= Deployment_name
-# SQL Database Credentials
+
+SQL Database Credentials
+
 DB_SERVER="your_server_name"
+
 DB_DATABASE="your_DB_name"
+
 DB_UID="DB_user_ID"
+
 DB_PWD="DB_password"
 
 
 4️⃣ Run the App
 python app.py
+
+
+# Hackathon Impact
+
+“Empowering smarter manufacturing with AI-driven insights.”
+
+Nokia GPT showcases how AI can seamlessly combine data, vision, and natural language understanding to drive efficiency, reduce downtime, and enable human–machine collaboration in industrial environments.
+
+# Future Enhancements
+
+🔊 Voice-based control for factory robots
+
+🧰 Integration with PLCs and MES systems
+
+🌐 Cloud-based data sharing across plants
+
+🕵️‍♀️ Advanced anomaly detection using multimodal AI
+
+# License
+
+This project is licensed under the MIT License — feel free to use and modify with attribution.
