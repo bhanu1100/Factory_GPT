@@ -79,6 +79,7 @@ DB_PWD="DB_password"
 
 
 4️⃣ Run the App
+
 python app.py
 
 
