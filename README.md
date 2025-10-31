@@ -50,3 +50,32 @@ Deployment	      GitHub Pages
 “Empowering smarter manufacturing with AI-driven insights.”
 
 Nokia GPT showcases how AI can seamlessly combine data, vision, and natural language understanding to drive efficiency, reduce downtime, and enable human–machine collaboration in industrial environments.
+
+
+# How to Run Locally
+1️⃣ Clone the Repository
+git clone https://github.com/<your-username>/File_name.git
+
+2️⃣ Install Dependencies
+pip install -r requirements.txt
+
+3️⃣ Add Environment Variables
+
+Create a .env file in the root directory:
+
+
+# AZURE Credentials
+AZURE_OPENAI_ENDPOINT="your_azure_endpoint_here"
+AZURE_OPENAI_KEY="your_api_key_here"
+AZURE_OPENAI_API_VERSION= "Version_details"
+AZURE_OPENAI_CHAT_DEPLOYMENT= Deployment_name
+AZURE_OPENAI_EMBED_DEPLOYMENT= Deployment_name
+# SQL Database Credentials
+DB_SERVER="your_server_name"
+DB_DATABASE="your_DB_name"
+DB_UID="DB_user_ID"
+DB_PWD="DB_password"
+
+
+4️⃣ Run the App
+python app.py
