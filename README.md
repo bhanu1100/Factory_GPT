@@ -67,15 +67,6 @@ AZURE_OPENAI_CHAT_DEPLOYMENT= Deployment_name
 
 AZURE_OPENAI_EMBED_DEPLOYMENT= Deployment_name
 
-SQL Database Credentials
-
-DB_SERVER="your_server_name"
-
-DB_DATABASE="your_DB_name"
-
-DB_UID="DB_user_ID"
-
-DB_PWD="DB_password"
 
 
 4️⃣ Run the App
