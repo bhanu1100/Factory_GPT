@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nokia BI Insights</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* --- Professional Light Theme with Blue Accents --- */
+            --nokia-blue: #0055D4;
+            --light-bg: #F5F5F7; /* Main app background */
+            --white-bg: #FFFFFF; /* Panel background */
+            --text-dark: #1D1D1F; /* Primary text */
+            --text-light: #6E6E73; /* Secondary text */
+            --border-color: #D2D2D7; /* Borders and dividers */
+            --ai-msg-bg: #E9ECEF; /* AI message background */
+            --user-msg-bg: var(--nokia-blue); /* User message background */
+        }
+
+        /* --- Global & Animations --- */
+        @keyframes subtleFadeInUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: 'Roboto', sans-serif; margin: 0;
+            background-color: var(--light-bg);
+            color: var(--text-dark);
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* --- Modified Header --- */
+        .app-header {
+            width: 100%;
+            padding: 0 2.5em;
+            height: 60px;
+            background: var(--white-bg); /* Reverted to White Header */
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            opacity: 0;
+            animation: subtleFadeInUp 0.7s ease-out 0.1s forwards;
+            z-index: 10;
+        }
+        .nokia-logo-img {
+            height: 50px; /* Adjusted logo size */
+            width: auto;
+            /* Removed filter: brightness(0) invert(1); to show original color */
+        }
+        .header-title {
+            font-weight: 500; /* Medium weight */
+            font-size: 1.5em; /* Slightly larger title */
+            color: var(--text-dark); /* Dark text on white header */
+            text-align: center;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        /* --- Main Content Area --- */
+        .app-container {
+            display: grid;
+            grid-template-columns: 40% 60%;
+            gap: 2em;
+            padding: 2em;
+            height: calc(100vh - 60px);
+        }
+
+        /* --- Standard Panel Styling --- */
+        .app-panel {
+            background: var(--white-bg);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            opacity: 0;
+            animation: subtleFadeInUp 0.7s ease-out 0.3s forwards;
+        }
+        .chat-pane {
+            animation-delay: 0.5s;
+        }
+
+        .image-pane { padding: 1.5em; }
+        .image-pane h2 {
+            color: var(--nokia-blue); /* Blue header */
+            text-align: left; font-size: 1.5em;
+            margin-top: 0; margin-bottom: 1em;
+        }
+        .preview-area {
+            flex-grow: 1; border: 2px dashed var(--border-color); border-radius: 8px;
+            display: flex; justify-content: center; align-items: center; margin-bottom: 1.5em;
+            background-color: #FDFDFD; overflow: hidden; position: relative;
+            transition: border-color 0.3s ease;
+        }
+        .preview-area:hover { border-color: var(--nokia-blue); }
+        #image-preview { max-width: 100%; max-height: 100%; display: block; }
+        .preview-prompt { color: var(--text-light); }
+        input[type="file"] { display: none; }
+        .upload-label {
+            display: block; text-align: center; background-color: var(--nokia-blue);
+            color: white; padding: 14px; border-radius: 8px; cursor: pointer;
+            font-weight: 500; font-size: 1em;
+            transition: all 0.2s ease-out;
+        }
+        .upload-label:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 85, 212, 0.2);
+        }
+
+        /* --- Chat Panel Styling --- */
+        .chat-header {
+            padding: 1.2em 1.5em; border-bottom: 1px solid var(--border-color);
+            font-weight: 500; font-size: 1.2em; color: var(--nokia-blue); /* Blue header */
+            flex-shrink: 0;
+        }
+        .chat-messages {
+            flex-grow: 1; padding: 1.5em; overflow-y: auto;
+        }
+        .message.animate-in {
+            animation: subtleFadeInUp 0.4s cubic-bezier(0.215, 0.610, 0.355, 1) forwards;
+        }
+        .message { display: flex; margin-bottom: 1.2em; max-width: 85%; }
+        .message .avatar {
+            width: 40px; height: 40px; border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
+            font-weight: 500; color: white; margin-right: 1em; flex-shrink: 0;
+        }
+        .message-content {
+            padding: 0.8em 1em; border-radius: 12px; line-height: 1.5;
+            word-wrap: break-word;
+        }
+        .message-content p { margin-top: 0; margin-bottom: 0.5em; }
+        .message-content ul, .message-content ol { margin: 0.5em 0 0.5em 1.2em; padding: 0; }
+        .message-content li { margin-bottom: 0.25em; }
+        .message-content strong { color: var(--text-dark); }
+        .user-message { margin-left: auto; flex-direction: row-reverse; }
+        .user-message .avatar { background-color: #999; margin-left: 1em; margin-right: 0; }
+        .user-message .message-content { background-color: var(--user-msg-bg); color: white; }
+        .ai-message { margin-right: auto; }
+        .ai-message .avatar { background-color: var(--nokia-blue); }
+        .ai-message .message-content { background-color: var(--ai-msg-bg); color: var(--text-dark); }
+        .typing-indicator { display: flex; align-items: center; }
+        .typing-indicator span {
+            height: 8px; width: 8px; margin: 0 2px;
+            background-color: var(--text-light);
+            border-radius: 50%;
+            display: inline-block;
+            animation: bob 1.4s infinite ease-in-out both;
+        }
+        .typing-indicator span:nth-child(1) { animation-delay: -0.32s; }
+        .typing-indicator span:nth-child(2) { animation-delay: -0.16s; }
+        @keyframes bob {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1.0); }
+        }
+
+        /* --- Standard Chat Input --- */
+        .chat-input {
+            padding: 1.5em; border-top: 1px solid var(--border-color);
+            background: #FDFDFD;
+            flex-shrink: 0;
+        }
+        #chat-form { display: flex; gap: 1em; }
+        #chat-form input {
+            flex-grow: 1; padding: 14px; border: 1px solid var(--border-color);
+            border-radius: 8px; font-size: 1em;
+            background: var(--white-bg);
+            color: var(--text-dark);
+            transition: all 0.3s ease;
+        }
+        #chat-form input::placeholder { color: var(--text-light); }
+        #chat-form input:focus {
+            outline: none;
+            border-color: var(--nokia-blue);
+            box-shadow: 0 0 0 4px rgba(0, 85, 212, 0.1);
+        }
+        #chat-form button {
+            padding: 0 24px; border: none; background-color: var(--nokia-blue);
+            color: white; border-radius: 8px; font-weight: 500; cursor: pointer;
+            transition: all 0.2s ease-out;
+        }
+        #chat-form button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 85, 212, 0.2);
+        }
+        #chat-form input:disabled, #chat-form button:disabled {
+            background-color: #E9ECEF;
+            color: var(--text-light);
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: none;
+        }
+         #chat-form button:disabled {
+             background-color: #A0C3FF;
+         }
+    </style>
+</head>
+<body>
+
+    <header class="app-header">
+        <img src="{{ url_for('static', filename='Resources/Nokia logo RGB-Bright blue.jpg') }}" alt="Nokia Logo" class="nokia-logo-img">
+        <div class="header-title">Power BI Insight</div>
+        <div style="width: 150px; height: 35px;"></div> </header>
+
+    <main class="app-container">
+
+        <div class="app-panel image-pane">
+            <h2>Report Visual</h2>
+            <div class="preview-area">
+                <span id="preview-prompt" class="preview-prompt">Upload a report to begin</span>
+                <img id="image-preview" src="" alt="Report Preview" style="display:none;"/>
+            </div>
+            <form id="upload-form">
+                <label for="file-upload" class="upload-label">Upload New Report</label>
+                <input id="file-upload" type="file" required accept="image/png, image/jpeg">
+            </form>
+        </div>
+
+        <div class="app-panel chat-pane">
+            <div class="chat-header">Conversation</div>
+            <div id="chat-messages" class="chat-messages">
+                </div>
+            <div class="chat-input">
+                <form id="chat-form">
+                    <input type="text" id="user-question" placeholder="Ask a follow-up question..." autocomplete="off" disabled>
+                    <button type="submit" disabled>Send</button>
+                </form>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // --- Chat Application Logic (This is the same as before) ---
+        const fileInput = document.getElementById('file-upload');
+        const imagePreview = document.getElementById('image-preview');
+        const previewPrompt = document.getElementById('preview-prompt');
+        const chatForm = document.getElementById('chat-form');
+        const userInput = document.getElementById('user-question');
+        const sendButton = chatForm.querySelector('button');
+        const chatMessages = document.getElementById('chat-messages');
+
+        fileInput.addEventListener('change', async () => {
+            const file = fileInput.files[0]; if (!file) return;
+            const reader = new FileReader();
+            reader.onload = e => {
+                imagePreview.src = e.target.result;
+                imagePreview.style.display = 'block';
+                previewPrompt.style.display = 'none';
+            };
+            reader.readAsDataURL(file);
+            chatMessages.innerHTML = '';
+            addMessage('Analyzing your report...', 'ai', true);
+
+            const formData = new FormData();
+            formData.append('report_file', file);
+
+            try {
+                const response = await fetch('/nokia-ai/powerbi-insights/upload', { method: 'POST', body: formData });
+                const data = await response.json();
+                const analyzingMsg = chatMessages.querySelector('.analyzing');
+
+                if (response.ok && data.initial_summary) {
+                    analyzingMsg.querySelector('.message-content').innerHTML = data.initial_summary;
+                    analyzingMsg.classList.remove('analyzing');
+                    userInput.disabled = false;
+                    sendButton.disabled = false;
+                    userInput.focus();
+                } else {
+                    analyzingMsg.querySelector('.message-content').innerHTML = `Error: ${data.error || 'Failed to get summary.'}`;
+                }
+            } catch (error) {
+                addMessage(`A network error occurred: ${error}`, 'ai');
+            }
+        });
+
+        chatForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const question = userInput.value.trim(); if (!question) return;
+            addMessage(question, 'user');
+            userInput.value = '';
+            addMessage('Thinking...', 'ai', true);
+
+            try {
+                const response = await fetch('/nokia-ai/powerbi-insights/ask', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ question: question })
+                });
+
+                const data = await response.json();
+                const thinkingMsg = chatMessages.querySelector('.analyzing');
+
+                thinkingMsg.remove();
+
+                if (data && data.answer) {
+                    addMessage(data.answer, 'ai');
+                } else if (data && data.error) {
+                    addMessage(`Error: ${data.error}`, 'ai');
+                } else {
+                    addMessage('Error: Received an empty response from the server.', 'ai');
+                }
+            } catch (error) {
+                const thinkingMsg = chatMessages.querySelector('.analyzing');
+                if (thinkingMsg) thinkingMsg.remove();
+                addMessage(`A network error occurred: ${error}`, 'ai');
+            }
+        });
+
+        function addMessage(text, sender, isAnalyzing = false) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}-message`;
+
+            const avatar = document.createElement('div');
+            avatar.className = 'avatar';
+            avatar.textContent = sender === 'ai' ? 'AI' : 'You';
+            messageDiv.appendChild(avatar);
+
+            const content = document.createElement('div');
+            content.className = 'message-content';
+
+            if (isAnalyzing) {
+                messageDiv.classList.add('analyzing');
+                content.innerHTML = `
+                    <div class="typing-indicator">
+                        <span></span><span></span><span></span>
+                    </div>
+                `;
+            } else if (sender === 'user') {
+                content.textContent = text;
+            } else {
+                content.innerHTML = text; // AI response is HTML
+            }
+
+            messageDiv.appendChild(content);
+            chatMessages.appendChild(messageDiv);
+
+            if (!isAnalyzing) {
+                setTimeout(() => {
+                    messageDiv.classList.add('animate-in');
+                }, 10);
+            }
+
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+    </script>
+</body>
+</html>
